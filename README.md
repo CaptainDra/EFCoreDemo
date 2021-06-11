@@ -1,0 +1,2 @@
+# EFCoreDemo
+EFCore learning doc
