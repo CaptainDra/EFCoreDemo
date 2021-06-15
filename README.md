@@ -31,3 +31,16 @@ Entity Framework Core是适用于.NET的新式对象数据库映射器。
 ## 基础入门教程
 
 官方训练于适用: [使用 Entity Framework Core 保留和检索关系数据](https://docs.microsoft.com/zh-cn/learn/modules/persist-data-ef-core/)
+
+## 获取Entity Framework Core运行时
+使用Nuget包管理器可以搜索Microsoft.EntityFrameworkCore.SqlServer以获取对应包。
+- 此操作在Rider与Visual Studio中均适用。
+- 如果不加选择，会默认选择最高最新版本(6.0)，但为稳定，我选择了5.0版本进行测试。
+
+实用的CLI指令：     
+```
+为.NET添加全局EF Core:
+dotnet tool install --global dotnet-ef
+```
+
+## 第一个EF Core应用
