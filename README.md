@@ -6,7 +6,7 @@
 Entity Framework Core是适用于.NET的新式对象数据库映射器。    
 
 ## 版本数据与支持
-###目前支持的数据库
+### 目前支持的数据库 ###
 适用数据库：SQL数据库（本地和Azure）、SQLite、MySQL、PostgreSQL、Azure Cosmos DB     
 [数据库支持具体版本](https://docs.microsoft.com/zh-cn/ef/core/providers/?tabs=dotnet-core-cli)     
 ### 目标支持的.NET版本
@@ -44,3 +44,6 @@ dotnet tool install --global dotnet-ef
 ```
 
 ## 第一个EF Core应用
+应用地址: [FirstApp](https://github.com/CaptainDra/EFCoreDemo/tree/master/FirstApp)    
+ - 步骤1: 对此应用要作为目标对象的数据库安装EF Core数据库程序包，这个应用使用较为轻量级的SQLite。
+ - 步骤2：添加Model.cs,并添加
