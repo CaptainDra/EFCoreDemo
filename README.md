@@ -43,7 +43,8 @@ Entity Framework Core是适用于.NET的新式对象数据库映射器。
 dotnet tool install --global dotnet-ef
 ```
 
-## 第一个EF Core应用
-应用地址: [FirstApp](https://github.com/CaptainDra/EFCoreDemo/tree/master/FirstApp)    
+## 第一个EF Core应用（简单的增删改查调用）
+应用地址: [FirstApp](https://github.com/CaptainDra/EFCoreDemo/tree/master/FirstApp)，这应用可以模拟一个简单的博客的增删改查功能。    
  - 步骤1: 对此应用要作为目标对象的数据库安装EF Core数据库程序包，这个应用使用较为轻量级的SQLite。
- - 步骤2：添加Model.cs,并添加
+ - 步骤2：添加Model.cs, 定义要用的数据结构,并添加增持删改查对应代码至Program.cs中
+ - 步骤3: 调试->开始执行(不调试)运行
