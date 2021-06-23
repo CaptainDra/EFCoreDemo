@@ -17,4 +17,16 @@
       <PackageReference Include="Microsoft.NETCore.Platforms" Version="5.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="NewDirectory1\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="NewDirectory1\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="NewDirectory1\**" />
+    </ItemGroup>
+
 </Project>

@@ -43,8 +43,18 @@ Entity Framework Core是适用于.NET的新式对象数据库映射器。
 dotnet tool install --global dotnet-ef
 ```
 
-## 第一个EF Core应用（简单的增删改查调用）
+## 第一个EF Core应用（简单的增删改查调用） 
 应用地址: [FirstApp](https://github.com/CaptainDra/EFCoreDemo/tree/master/FirstApp)，这应用可以模拟一个简单的博客的增删改查功能。    
  - 步骤1: 对此应用要作为目标对象的数据库安装EF Core数据库程序包，这个应用使用较为轻量级的SQLite。
  - 步骤2：添加Model.cs, 定义要用的数据结构,并添加增持删改查对应代码至Program.cs中
  - 步骤3: 调试->开始执行(不调试)运行
+
+## EF Core 教程
+### 1. EFCore与Razor Pages（轻量级Web界面）的交互 ###
+应用地址: [ContosoUniversity](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity)，通过轻量级web网页开发绑定学生系统的增删改查等功能。    
+ - 步骤1：创建一个.NET Core 5.0版本，命名为并ContosoUniversity    
+   ![create_RazorPageApp](image/create_RazorPageApp.png)
+ - 步骤2：更改Pages/Shared/_Layout.cshtml中代码：
+   - 重命名其中ContosoUniversity项，改为Contoso University，其中共有三处
+   - 删除"ul class="navbar-nav flex-grow-1"中原本的主页与隐私改为关于、学生、课程、讲师、部门等五项
+ - 步骤3：替换Pages/Index.cshtml中代码
