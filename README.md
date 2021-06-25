@@ -51,4 +51,7 @@ dotnet tool install --global dotnet-ef
 
 ## EF Core 教程
 ### 1. EFCore与Razor Pages（轻量级Web界面）的交互 ###
-应用地址: [ContosoUniversity](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity)，通过轻量级web网页开发绑定学生系统的增删改查等功能。    
+应用地址: [ContosoUniversity](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_1)，通过轻量级web网页开发绑定学生系统的增删改查等功能。 
+
+### 1. EFCore与Razor Pages（轻量级Web界面）的交互 ###
+应用地址: [ContosoUniversity](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_1)，通过轻量级web网页开发绑定学生系统的增删改查等功能。 
