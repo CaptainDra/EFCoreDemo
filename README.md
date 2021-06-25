@@ -53,5 +53,5 @@ dotnet tool install --global dotnet-ef
 ### 1. EFCore与Razor Pages（轻量级Web界面）的交互 ###
 应用地址: [ContosoUniversity_1](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_1)，通过轻量级web网页开发绑定学生系统并且包括两种不同的数据库初始化方法来初始本地数据库。 
 
-### 1. EFCore与Razor Pages（轻量级Web界面）的交互 ###
-应用地址: [ContosoUniversity_2](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_2)，通过轻量级web网页开发绑定学生系统的增删改查等功能。 
+### CRUD操作 ###
+应用地址: [ContosoUniversity_2](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_2)，学生系统的增删改查等功能。 
