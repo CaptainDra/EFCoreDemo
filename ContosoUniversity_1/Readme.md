@@ -133,11 +133,11 @@
     ```
   - 更改Program.cs中代码改为DbInitializer()方法
   - 在PowerShell中使用"Drop-Database -Confirm"  清空数据库
-  - 重新运行，即可见到已经创建好的数据在网页中如下图呈现：
-    ![create_RazorPageApp](../image/Seed_Student.png)
-    数据库如下图：
-    ![create_RazorPageApp](../image/Table_Student.png)
-    数据模型：
+  - 重新运行，即可见到已经创建好的数据在网页中如下图呈现：       
+    ![create_RazorPageApp](../image/Seed_Student.png)       
+    数据库如下图：        
+    ![create_RazorPageApp](../image/Table_Student.png)      
+    数据模型：      
     ```sql
     CREATE TABLE [dbo].[Student] (
     [ID]             INT            IDENTITY (1, 1) NOT NULL,
