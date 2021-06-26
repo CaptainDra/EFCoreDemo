@@ -147,5 +147,4 @@
     CONSTRAINT [PK_Student] PRIMARY KEY CLUSTERED ([ID] ASC)
     );
     ```
-    
-## 2. CRUD操作
+
