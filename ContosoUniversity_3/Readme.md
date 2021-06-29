@@ -252,3 +252,94 @@ namespace ContosoUniversity.Pages.Students
 ```
 
 ### 分组功能 ###
+- 数据库查询可按不同条件进行分组，例如对于学生，可以按照注册日期进行分组    
+- 可以创建新的数据模型来生成新的分组视图，在Models/SchoolViewModels中创建EnrollmentDateGroup：
+```c#
+using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace ContosoUniversity.Models.SchoolViewModels
+{
+    public class EnrollmentDateGroup
+    {
+        [DataType(DataType.Date)]
+        public DateTime? EnrollmentDate { get; set; }
+
+        public int StudentCount { get; set; }
+    }
+}
+```
+- 创建Pages/About.cshtml文件：
+```html
+@page
+@model ContosoUniversity.Pages.AboutModel
+
+@{
+    ViewData["Title"] = "Student Body Statistics";
+}
+
+<h2>Student Body Statistics</h2>
+
+<table>
+    <tr>
+        <th>
+            Enrollment Date
+        </th>
+        <th>
+            Students
+        </th>
+    </tr>
+
+    @foreach (var item in Model.Students)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EnrollmentDate)
+            </td>
+            <td>
+                @item.StudentCount
+            </td>
+        </tr>
+    }
+</table>
+```
+- 为页面创建About.cshtml.cs文件,使用group by语法将学生用创建日期分组：
+```c#
+using ContosoUniversity.Models.SchoolViewModels;
+using ContosoUniversity.Data;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ContosoUniversity.Models;
+
+namespace ContosoUniversity.Pages
+{
+    public class AboutModel : PageModel
+    {
+        private readonly SchoolContext _context;
+
+        public AboutModel(SchoolContext context)
+        {
+            _context = context;
+        }
+
+        public IList<EnrollmentDateGroup> Students { get; set; }
+
+        public async Task OnGetAsync()
+        {
+            IQueryable<EnrollmentDateGroup> data =
+                from student in _context.Students
+                group student by student.EnrollmentDate into dateGroup
+                select new EnrollmentDateGroup()
+                {
+                    EnrollmentDate = dateGroup.Key,
+                    StudentCount = dateGroup.Count()
+                };
+
+            Students = await data.AsNoTracking().ToListAsync();
+        }
+    }
+}
+```
