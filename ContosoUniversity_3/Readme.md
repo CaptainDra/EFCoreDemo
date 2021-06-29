@@ -1,291 +1,254 @@
 ﻿# EF Core 教程
-## 2. CRUD操作
-### 读取(READ)操作 ###
-- 在ContosoUniverisy_1的最后，可以在Pages/Students/Details.cshtml中读取到关于学生的数据:
-  ![create_RazorPageApp](../image/Detail_Student.png)    
-                其中包括学生的姓名与注册日期    
-  - 可将原本的OnGetAsync中的读取方法（仅包括id指定）
-  ```c#
-  Student = await _context.Students.FirstOrDefaultAsync(m => m.ID == id);
-  ```
-  - 通过Include添加Student-Enrollment-Course的导航逻辑,其中AsNoTracking可以提升性能
-  ```c#
-  Student = await _context.Students
-        .Include(s => s.Enrollments)
-        .ThenInclude(e => e.Course)
-        .AsNoTracking()
-        .FirstOrDefaultAsync(m => m.ID == id);
-  ```
-  - 然后在html文件中更新添加foreach循环显示该学生的全部课程与成绩
-  ```html
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Student.Enrollments)
-        </dt>
-        <dd class="col-sm-10">
-            <table class="table">
-                <tr>
-                    <th>Course Title</th>
-                    <th>Grade</th>
-                </tr>
-                @foreach (var item in Model.Student.Enrollments)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Course.Title)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Grade)
-                        </td>
-                    </tr>
-                }
-            </table>
-        </dd>
-  ```
-- 新的学生详情页面如图所示
-  ![create_RazorPageApp](../image/Detail_Student_Enrollment.png)    
-  可用的读取方法:    
-  FirstOrDefaultAsync: 获取读取到的第一个或者NULL(未找到任何内容)    
-  SingleOrDefaultAsync: 进获取一个找到的内容或返回null(未找到内容)，如果找到多个内容则触发异常
-  FindAsync:可以找到一个具有主键的实体但无法调用Include所以一般用FirstOrDefaultAsync
-  
-### 创建(CREATE)操作 ###
-- 自动生成的代码中在创建操作中有漏洞，其中的OnPostAsync()函数(代码如下)可通过一些HTTP抓包工具给网页中不存在的私有项强行赋值
+## 3. 筛选、排序、分页功能
+### 排序功能 ###
+- 对于一个对象，可以通过不同方法来进行排序，例如对于学生，可以按照姓名升降序或者创建日期升降序排列
+- 在Pages/Students/Index.cshtml.cs中添加如下排序方法并替换原有OnGetAsync方法实现排序：
 ```c#
-public async Task<IActionResult> OnPostAsync()
+     // 排序方法
+    public string NameSort { get; set; }
+    public string DateSort { get; set; }
+    // 筛选器
+    public string CurrentFilter { get; set; }
+    public string CurrentSort { get; set; }
+    
+    public IList<Student> Students { get;set; }
+    
+    public async Task OnGetAsync(string sortOrder)
     {
-        if (!ModelState.IsValid)
+        // 根据入参决定排列方式, 默认包含姓名升降序，创建日期升降序
+        NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        DateSort = sortOrder == "Date" ? "data_desc" : "Date";
+    
+        IQueryable<Student> studentsIQ = from s in _context.Students select s;
+        switch (sortOrder)
         {
-            return Page();
+            case "name_desc":
+                studentsIQ = studentsIQ.OrderByDescending(s => s.LastName);
+                break;
+            case "Date":
+                studentsIQ = studentsIQ.OrderBy(s => s.EnrollmentDate);
+                break;
+            case "date_desc":
+                studentsIQ = studentsIQ.OrderByDescending(s => s.EnrollmentDate);
+                break;
+            default:
+                studentsIQ = studentsIQ.OrderBy(s => s.LastName);
+                break;
         }
-        // 此处直接添加整个Student，会导致非学生基本信息会被添加
-        _context.Students.Add(Student);
-        await _context.SaveChangesAsync();
-
-        return RedirectToPage("./Index");
+    
+        Students = await studentsIQ.AsNoTracking().ToListAsync();
     }
 ```
-- 方法1：使用TryUpdateModelAsync，对其中赋值逻辑做出一些更改，改为如下函数:
-```c#
-public async Task<IActionResult> OnPostAsync()
-    {
-        var emptyStudent = new Student();
-        // 仅赋值姓名日期等注册时候要填的信息，避免额外信息注入
-        //  (s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate)
-        if (await TryUpdateModelAsync<Student>(
-            emptyStudent,
-            "student",   // Prefix for form value.
-            s => s.FirstName, s => s.LastName, s => s.EnrollmentDate))
-        {
-            _context.Students.Add(emptyStudent);
-            await _context.SaveChangesAsync();
-            return RedirectToPage("./Index");
-        }
-
-        return Page();
-    }
-```
-- 方法2：增加一个视图模型(StudentVM)，专门为这个界面创建一个数据模型，此模型仅包含UI页面所需属性：
-```c#
-public class StudentVM
-{
-    public int ID { get; set; }
-    public string LastName { get; set; }
-    public string FirstName { get; set; }
-    public DateTime EnrollmentDate { get; set; }
-}
-```
-- 然后变更一下前端的代码,将原来的Student改为StudentVM：    
+- 并在Students/Index.cshtml中为列表表头LastName与EnrollmentDate添加按钮：
 ```html
-@page
-@model CreateVMModel
+<a asp-page="./Index" asp-route-sortOrder="@Model.NameSort">
+    @Html.DisplayNameFor(model => model.Students[0].LastName)
+</a>
+<a asp-page="./Index" asp-route-sortOrder="@Model.DateSort">
+    @Html.DisplayNameFor(model => model.Students[0].EnrollmentDate)
+</a>
+```
+其中通过asp-route-sortOrder = “”来实现对于后端代码sortOrder的赋值，其效果与HTTP中?sortOrder=相同
 
-@{
-    ViewData["Title"] = "Create";
+### 筛选功能 ###
+- 更新OnGetAsync方法，增加传入参数searchString，并针对searchString做出操作：
+```c#
+CurrentFilter = searchString;
+if (!String.IsNullOrEmpty(searchString))
+{
+    // 可将所有参数全转换为大写即可实现不区分大小写测试
+    studentsIQ = studentsIQ.Where(s => s.LastName.Contains(searchString)
+                           || s.FirstName.Contains(searchString));
+    // studentsIQ = studentsIQ.Where(s => s.LastName.ToUpper().Contains(searchString.ToUpper()) || s.FirstName.ToUpper().Contains(searchString.ToUpper()));
 }
-
-<h1>Create</h1>
-
-<h4>Student</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="StudentVM.LastName" class="control-label"></label>
-                <input asp-for="StudentVM.LastName" class="form-control" />
-                <span asp-validation-for="StudentVM.LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudentVM.FirstName" class="control-label"></label>
-                <input asp-for="StudentVM.FirstName" class="form-control" />
-                <span asp-validation-for="StudentVM.FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudentVM.EnrollmentDate" class="control-label"></label>
-                <input asp-for="StudentVM.EnrollmentDate" class="form-control" />
-                <span asp-validation-for="StudentVM.EnrollmentDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+```
+注意：在这里的ToUpper并不会影响查询效率
+- 并在前端添加搜索界面：
+```html
+<form asp-page="./Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name:
+            <input type="text" name="SearchString" value="@Model.CurrentFilter" />
+            <input type="submit" value="Search" class="btn btn-primary" /> |
+            <a asp-page="./Index">Back to full List</a>
+        </p>
     </div>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+</form>
 ```
-- 然后变更一下最初的赋值函数为：
+
+### 分页操作 ###
+- 在项目文件夹下创建PaginatedList.cs来实现分页功能，其中使用Skip与Take来筛选数据：
 ```c#
-public async Task<IActionResult> OnPostAsync()
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
+namespace ContosoUniversity_3
+{
+    public class PaginatedList<T> : List<T>
     {
-        if (!ModelState.IsValid)
+        public int PageIndex { get; private set; }
+        public int TotalPages { get; private set; }
+
+        public PaginatedList(List<T> items, int count, int pageIndex, int pageSize)
         {
-            return Page();
+            PageIndex = pageIndex;
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize);
+
+            this.AddRange(items);
         }
-        // 此处用StudentVM赋值给Student类避免了多余数据的添加
-        var entry = _context.Add(new Student());
-        entry.CurrentValues.SetValues(StudentVM);
-        await _context.SaveChangesAsync();
 
-        return RedirectToPage("./Index");
+        public bool HasPreviousPage
+        {
+            get
+            {
+                return (PageIndex > 1);
+            }
+        }
+
+        public bool HasNextPage
+        {
+            get
+            {
+                return (PageIndex < TotalPages);
+            }
+        }
+
+        public static async Task<PaginatedList<T>> CreateAsync(
+            IQueryable<T> source, int pageIndex, int pageSize)
+        {
+            var count = await source.CountAsync();
+            var items = await source.Skip(
+                (pageIndex - 1) * pageSize)
+                .Take(pageSize).ToListAsync();
+            return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
     }
-```
-
-### 编辑(UPDATE)操作 ###    
-- 在Students/Edit.cshtml.cs中，OnPostAsync方法中的问题与创建界面一样，也可以更改一下以避免过度发布和数据注入，而对于OnGetAsync，我们可以使用FindAsync方法（因为不需要include，效率更高），可将代码更新为如下代码：
-```c#
-public async Task<IActionResult> OnGetAsync(int? id)
-{
-    if (id == null)
-    {
-        return NotFound();
-    }
-
-    Student = await _context.Students.FindAsync(id);
-
-    if (Student == null)
-    {
-        return NotFound();
-    }
-    return Page();
-}
-
-public async Task<IActionResult> OnPostAsync(int id)
-{
-    var studentToUpdate = await _context.Students.FindAsync(id);
-
-    if (studentToUpdate == null)
-    {
-        return NotFound();
-    }
-
-    if (await TryUpdateModelAsync<Student>(
-        studentToUpdate,
-        "student",
-        s => s.FirstMidName, s => s.LastName, s => s.EnrollmentDate))
-    {
-        await _context.SaveChangesAsync();
-        return RedirectToPage("./Index");
-    }
-
-    return Page();
 }
 ```
-### 删除(DELETE)操作 ###
--  更新Pages/Students/Delete.cshtml.cs中代码，以添加日志与网页报错功能 ：
+- 然后在appsettings.json配置文件中添加"PageSize"并设置默认一页包含条目个数
+- 更新Students/Index.cshtml.cs中代码，添加分页功能，包括储存当前页数功能，以及翻页功能：
 ```c#
-using ContosoUniversity.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using ContosoUniversity;
+using ContosoUniversity.Models;
 
 namespace ContosoUniversity.Pages.Students
 {
-    public class DeleteModel : PageModel
+    public class IndexModel : PageModel
     {
         private readonly ContosoUniversity.SchoolContext _context;
-        private readonly ILogger<DeleteModel> _logger;
-        // 创建日志
-        public DeleteModel(ContosoUniversity.SchoolContext context,
-                           ILogger<DeleteModel> logger)
+        private readonly IConfiguration Configuration;
+
+        public IndexModel(SchoolContext context, IConfiguration configuration)
         {
             _context = context;
-            _logger = logger;
+            Configuration = configuration;
         }
+        //public IndexModel(ContosoUniversity.SchoolContext context)
+        //{
+        //    _context = context;
+        //}
+        // 排序方法
+        public string NameSort { get; set; }
+        public string DateSort { get; set; }
+        // 筛选器
+        public string CurrentFilter { get; set; }
+        public string CurrentSort { get; set; }
 
-        [BindProperty]
-        public Student Student { get; set; }
-        public string ErrorMessage { get; set; }
+        //public IList<Student> Students { get;set; }
 
-        public async Task<IActionResult> OnGetAsync(int? id, bool? saveChangesError = false)
+        public PaginatedList<Student> Students { get; set; }
+
+        public async Task OnGetAsync(string sortOrder,string currentFilter, string searchString, int? pageIndex)
         {
-            if (id == null)
+            CurrentSort = sortOrder;
+            // 根据入参决定排列方式, 默认包含姓名升降序，创建日期升降序
+            NameSort = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            DateSort = sortOrder == "Date" ? "data_desc" : "Date";
+
+            IQueryable<Student> studentsIQ = from s in _context.Students select s;
+            if (searchString != null)
             {
-                return NotFound();
+                pageIndex = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            CurrentFilter = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                // 可将所有参数全转换为大写即可实现不区分大小写测试
+                studentsIQ = studentsIQ.Where(s => s.LastName.Contains(searchString)
+                                       || s.FirstName.Contains(searchString));
+                // studentsIQ = studentsIQ.Where(s => s.LastName.ToUpper().Contains(searchString.ToUpper()) || s.FirstName.ToUpper().Contains(searchString.ToUpper()));
             }
 
-            Student = await _context.Students
-                .AsNoTracking()
-                .FirstOrDefaultAsync(m => m.ID == id);
-
-            if (Student == null)
+            switch (sortOrder)
             {
-                return NotFound();
+                case "name_desc":
+                    studentsIQ = studentsIQ.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    studentsIQ = studentsIQ.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    studentsIQ = studentsIQ.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+                default:
+                    studentsIQ = studentsIQ.OrderBy(s => s.LastName);
+                    break;
             }
 
-            if (saveChangesError.GetValueOrDefault())
-            {
-                ErrorMessage = String.Format("Delete {ID} failed. Try again", id);
-            }
-
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var student = await _context.Students.FindAsync(id);
-
-            if (student == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                _context.Students.Remove(student);
-                await _context.SaveChangesAsync();
-                return RedirectToPage("./Index");
-            }
-            catch (DbUpdateException ex)
-            {
-                // 捕获报错
-                _logger.LogError(ex, ErrorMessage);
-
-                return RedirectToAction("./Delete",
-                                     new { id, saveChangesError = true });
-            }
+            var pageSize = Configuration.GetValue("PageSize", 4);
+            Students = await PaginatedList<Student>.CreateAsync(
+                studentsIQ.AsNoTracking(), pageIndex ?? 1, pageSize);
         }
     }
 }
+
 ```
-- 然后再HTML文件中添加错误信息映射:
+- 更新前端网页，为筛选按钮增加存储当前筛选（搜索）功能：     
 ```html
-<p class="text-danger">@Model.ErrorMessage</p>
+<a asp-page="./Index" asp-route-sortOrder="@Model.NameSort" asp-route-currentFilter="@Model.CurrentFilter">
+    @Html.DisplayNameFor(model => model.Students[0].LastName)
+</a>
+<a asp-page="./Index" asp-route-sortOrder="@Model.NameSort" asp-route-currentFilter="@Model.CurrentFilter">
+    @Html.DisplayNameFor(model => model.Students[0].EnrollmentDate)
+</a>
+```
+- 同时在底端增加翻页功能(若没有上一页或者没有下一页应不能点击上一页或下一页)，同时记录之前的排序方法与筛选输入:     
+```html
+@{
+    var prevDisabled = !Model.Students.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.Students.HasNextPage ? "disabled" : "";
+}
+
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Students.PageIndex - 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @prevDisabled">
+    Previous
+</a>
+<a asp-page="./Index"
+   asp-route-sortOrder="@Model.CurrentSort"
+   asp-route-pageIndex="@(Model.Students.PageIndex + 1)"
+   asp-route-currentFilter="@Model.CurrentFilter"
+   class="btn btn-primary @nextDisabled">
+    Next
+</a>
 ```
 
-运行即可使用更安全的CRUD功能
+### 分组功能 ###
