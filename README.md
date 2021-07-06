@@ -56,5 +56,14 @@ dotnet tool install --global dotnet-ef
 ### 2. CRUD操作 ###
 应用地址: [ContosoUniversity_2](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_2)，学生系统的增删改查等功能。 
 
-### 3. CRUD操作 ###
-应用地址: [ContosoUniversity_2](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_3)，筛选，排序，分页功能。 
+### 3. 筛选、排序、分页 ###
+应用地址: [ContosoUniversity_3](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_3)，筛选，排序，分页功能。     
+
+### 4. 迁移 ###
+应用地址: [ContosoUniversity_4](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_4)，迁移。 
+
+### 5. 读取，更新plus ###
+应用地址: [ContosoUniversity_5](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_5)，更复杂的模型与读取更新。    
+
+### 6 并发冲突处理 ###
+应用地址: [ContosoUniversity_6](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_6)，并发冲突处理。
