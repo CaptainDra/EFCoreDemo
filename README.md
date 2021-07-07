@@ -1,3 +1,4 @@
+[toc]
 # Entity Framework Core入门文档 #
 ***
 这是一篇根据[Microsoft官方文档](https://github.com/dotnet/EntityFramework.Docs)
