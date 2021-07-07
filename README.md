@@ -45,32 +45,32 @@ dotnet tool install --global dotnet-ef
 ```
 
 ## 第一个EF Core应用（简单的增删改查调用） 
-应用地址: [FirstApp](https://github.com/CaptainDra/EFCoreDemo/tree/master/FirstApp)，这应用可以模拟一个简单的博客的增删改查功能。    
+应用地址: [FirstApp](./FirstApp)，这应用可以模拟一个简单的博客的增删改查功能。    
  - 步骤1: 对此应用要作为目标对象的数据库安装EF Core数据库程序包，这个应用使用较为轻量级的SQLite。
  - 步骤2：添加Model.cs, 定义要用的数据结构,并添加增持删改查对应代码至Program.cs中
  - 步骤3: 调试->开始执行(不调试)运行
 
 ## EF Core 教程
 ### 1. EFCore与Razor Pages（轻量级Web界面）的交互 ###
-应用地址: [ContosoUniversity_1](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_1)，通过轻量级web网页开发绑定学生系统并且包括两种不同的数据库初始化方法来初始本地数据库。     
+应用地址: [ContosoUniversity_1](./ContosoUniversity_1)，通过轻量级web网页开发绑定学生系统并且包括两种不同的数据库初始化方法来初始本地数据库。     
 
 ### 2. CRUD操作 ###
-应用地址: [ContosoUniversity_2](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_2)，学生系统的增删改查等功能。    
+应用地址: [ContosoUniversity_2](./ContosoUniversity_2)，学生系统的增删改查等功能。    
 
 ### 3. 筛选、排序、分页 ###
-应用地址: [ContosoUniversity_3](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_3)，筛选，排序，分页功能。       
+应用地址: [ContosoUniversity_3](./ContosoUniversity_3)，筛选，排序，分页功能。       
 
 ### 4. 迁移 ###
-应用地址: [ContosoUniversity_4](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_4)，迁移。     
+应用地址: [ContosoUniversity_4](./ContosoUniversity_4)，迁移。     
 
 ### 5. 读取，更新plus ###
-应用地址: [ContosoUniversity_5](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_5)，更复杂的模型与读取更新。       
+应用地址: [ContosoUniversity_5](./ContosoUniversity_5)，更复杂的模型与读取更新。       
 
 ### 6 并发冲突处理 ###
-应用地址: [ContosoUniversity_6](https://github.com/CaptainDra/EFCoreDemo/tree/master/ContosoUniversity_6)，并发冲突处理。       
+应用地址: [ContosoUniversity_6](./ContosoUniversity_6)，并发冲突处理。       
 
 ## 文本文档
-[纯文本版本文档](https://github.com/CaptainDra/EFCoreDemo/tree/master/Document)：脱离应用的文字版本说明
+[纯文本版本文档](./Document)：脱离应用的文字版本说明
 
 
 ## 参考文献

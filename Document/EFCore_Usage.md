@@ -4,8 +4,8 @@ EF Core是Entity Framework的全新的为.Net Core的定制版本，支持多种
 可以通过代码编写模型组类实现数据库支持，也可以通过工具逆向生成这些组类
 
 ### 1.1 定义数据库和模型
-数据库一般是按照DbContext类派生建模，该类包含多个类型为DbSet<T>的集合属性，连接字符串，对象注入，例如:[示例数据库构造](https://github.com/CaptainDra/EFCoreDemo/blob/master/ContosoUniversity_1/Data/SchoolContext.cs)     
-然后表的构造类一般是使用一个类来描述表中关系然后与公共接口匹配，例如:[示例表类型构造](https://github.com/CaptainDra/EFCoreDemo/blob/master/ContosoUniversity_1/Models/Student.cs)    
+数据库一般是按照DbContext类派生建模，该类包含多个类型为DbSet<T>的集合属性，连接字符串，对象注入，例如:[示例数据库构造](../ContosoUniversity_1/Data/SchoolContext.cs)     
+然后表的构造类一般是使用一个类来描述表中关系然后与公共接口匹配，例如:[示例表类型构造](../ContosoUniversity_1/Models/Student.cs)    
 一般在创建类的时候考虑类的面向对象特征，并且每一个生成表的类必须有一个主键
 
 ### 1.2 自动创建数据库
@@ -32,7 +32,7 @@ using (var context = new BloggingContext())
 ```
 
 ### 2.2 处理关系
-参考[学生信息](https://github.com/CaptainDra/EFCoreDemo/blob/master/ContosoUniversity_2/Models/Student.cs)，其中的注册信息为外键，
+参考[学生信息](../ContosoUniversity_2/Models/Student.cs)，其中的注册信息为外键，
 在查询记录的时候可以通过include方法来调用底层的JOIN语句来展开外键内容。   
 但是使用的Include方法越多，关联的表就越多占用的内存量也越多。
 
@@ -83,3 +83,11 @@ using (var context = new BloggingContext())
 1. 查询相关信息
 2. 通过Remove方法移除context中的对象。
 但是一般为了维护业务，不会进行删除操作。
+   
+## 3. 迁移功能
+### 3.1 使用迁移的意义
+当数据库表发生变化后（增加或删除实体或属性），需要使应用程序与数据库保持同步，迁移功能可以以递增的方式更新数据库架构，使得程序与数据模型保持同步，同时保留现有数据
+
+### 3.2 创建迁移
+使用指令Add-Migration即可创建迁移，使用dotnet ef database update即可根据迁移创建数据库和架构    
+具体操作可见[教程：迁移](../ContosoUniversity_4)
