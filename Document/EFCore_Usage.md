@@ -91,3 +91,8 @@ using (var context = new BloggingContext())
 ### 3.2 创建迁移
 使用指令Add-Migration即可创建迁移，使用dotnet ef database update即可根据迁移创建数据库和架构    
 具体操作可见[教程：迁移](../ContosoUniversity_4)
+
+### 3.3 迁移与种子文件
+Add-Migration操作的同时可以产生种子文件，可以用这个在创建数据库的时候用来当种子文件初始化
+
+## 4. 冲突处理
