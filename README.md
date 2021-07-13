@@ -1,5 +1,5 @@
 # 目录
-- [Entity Framework Core入门文档](#entity-framework-core----)
+- [Entity Framework Core入门文档](#entity-framework-core入门文档)
     * [版本数据与支持](#-------)
         + [目前支持的数据库](#--------)
         + [目标支持的.NET版本](#-----net--)
