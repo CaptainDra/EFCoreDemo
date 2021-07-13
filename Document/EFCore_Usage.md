@@ -81,7 +81,7 @@ using (var context = new BloggingContext())
 ### 2.5 删除记录
 删除记录也是两步：
 1. 查询相关信息
-2. 通过Remove方法移除context中的对象。
+2. 通过Remove方法移除context中的对象。     
 但是一般为了维护业务，不会进行删除操作。
    
 ## 3. 迁移功能
