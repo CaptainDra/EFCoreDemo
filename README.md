@@ -1,21 +1,20 @@
 # 目录
-- [Entity Framework Core入门文档](#entity-framework-core----)
-    * [版本数据与支持](#-------)
-        + [目前支持的数据库](#--------)
-        + [目标支持的.NET版本](#-----net--)
-    * [API参考](#api--)
-    * [基础入门教程](#------)
-    * [获取Entity Framework Core运行时](#--entity-framework-core---)
-    * [第一个EF Core应用（简单的增删改查调用）](#---ef-core-------------)
-    * [EF Core 教程](#ef-core---)
-        + [1. EFCore与Razor Pages（轻量级Web界面）的交互](#1-efcore-razor-pages----web------)
-        + [2. CRUD操作](#2-crud--)
-        + [3. 筛选、排序、分页](#3---------)
-        + [4. 迁移](#4---)
-        + [5. 读取，更新plus](#5------plus)
-        + [6 并发冲突处理](#6-------)
-    * [文本文档](#----)
-    * [参考文献](#----)
+- [Entity Framework Core入门文档](#entity-framework-core入门文档)
+    * [版本数据与支持](#版本数据与支持)
+        + [目前支持的数据库](#目前支持的数据库)
+        + [目标支持的.NET版本](#目标支持的NET版本)
+    * [API参考](#API参考)
+    * [基础入门教程](#基础入门教程)
+    * [获取Entity Framework Core运行时](#获取Entity-Framework-Core运行时)
+    * [第一个EF Core应用（简单的增删改查调用）](#第一个EF-Core应用（简单的增删改查调用）)
+    * [EF Core 教程](#EF-Core-教程)
+        + [1. EFCore与Razor Pages（轻量级Web界面）的交互](#1-efcore与razor-pages轻量级web界面的交互)
+        + [2. CRUD操作](#2-crud操作)
+        + [3. 筛选、排序、分页](#3-筛选排序分页)
+        + [4. 迁移](#4-迁移)
+        + [5. 读取，更新plus](#5-读取更新plus)
+        + [6 并发冲突处理](#6-并发冲突处理)
+    * [文本文档](#文本文档)
 # Entity Framework Core入门文档 #
 ***
 这是一篇根据[Microsoft官方文档](https://github.com/dotnet/EntityFramework.Docs)
@@ -89,5 +88,3 @@ dotnet tool install --global dotnet-ef
 ## 文本文档
 [纯文本版本文档](./Document)：脱离应用的文字版本说明
 
-
-## 参考文献
