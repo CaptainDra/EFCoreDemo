@@ -104,7 +104,7 @@ using (var context = new BloggingContext())
 Add-Migration操作的同时可以产生种子文件，可以用这个在创建数据库的时候用来当种子文件初始化
 
 ## 4. 冲突 & 处理
-对于并发操作，会遇到冲突，EF Core提供乐观并发控制解决冲突
+对于并发操作，会遇到冲突，EF Core提供乐观并发控制解决冲突    
 [教程: 并发与冲突处理](../ContosoUniversity_6)
 ### 4.1 EF Core中的并发冲突
 对于数据库中事务处理的冲突，EF Core采用乐观并发控制来处理冲突，每当EF Core调用SaveChanges方法时，会比对一个token值来判断是否存在冲突。(此token会在事务开始时从数据库获取并在数据库更新后更新)：    
