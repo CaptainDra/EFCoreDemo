@@ -88,5 +88,3 @@ dotnet tool install --global dotnet-ef
 ## 文本文档
 [纯文本版本文档](./Document)：脱离应用的文字版本说明
 
-
-## 参考文献
