@@ -1,7 +1,10 @@
 ﻿# EF Core常见基础任务
 EF Core是Entity Framework的全新的为.Net Core的定制版本，支持多种版本的数据库，在.Net Core应用中安装EF Core只需要Nuget包安装Microsoft.EntityFrameworkCore包，以及具体数据库提供程序的包。
 ## 1. 建模数据库
-可以通过代码编写模型组类实现数据库支持，也可以通过工具逆向生成这些组类
+可以通过代码编写模型组类实现数据库支持，也可以通过工具逆向生成这些组类    
+参考:    
+[教程: 数据库建模](../ContosoUniversity_1)     
+[教程: 更复杂的数据库建模](../ContosoUniversity_5)      
 
 ### 1.1 定义数据库和模型
 数据库一般是按照DbContext类派生建模，该类包含多个类型为DbSet<T>的集合属性，连接字符串，对象注入，例如:[示例数据库构造](../ContosoUniversity_1/Data/SchoolContext.cs)     
@@ -13,6 +16,9 @@ EF Core是Entity Framework的全新的为.Net Core的定制版本，支持多种
 也可以使用SeedTable来生成已经有数据的数据库。
 
 ## 2. 表数据处理
+[教程: 基础增删改查操作](../ContosoUniversity_2)     
+[教程: 基于选择的筛选排序分页操作](../ContosoUniversity_3)     
+[教程: 复杂数据查询处理](../ContosoUniversity_5)     
 ### 2.1 查询记录
 EF Core微软官方文档建议使用LINQ来查询数据库中的数据。数据库将LINQ查询的表示形式传递给数据库提供程序，然后进行查，例如：    
 ```c#
@@ -118,4 +124,4 @@ Add-Migration操作的同时可以产生种子文件，可以用这个在创建�
 3. 重新刷新事务，获取最新的token并重新获取数据库中的值
 4. 请用户重新提交/自动重新提交事务直到没有冲突    
 
-具体实施可参考[6.并发与冲突处理](../ContosoUniversity_6)
+具体实施可参考[教程: 并发与冲突处理](../ContosoUniversity_6)
