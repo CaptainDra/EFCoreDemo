@@ -95,4 +95,26 @@ using (var context = new BloggingContext())
 ### 3.3 迁移与种子文件
 Add-Migration操作的同时可以产生种子文件，可以用这个在创建数据库的时候用来当种子文件初始化
 
-## 4. 冲突处理
+## 4. 冲突 & 处理
+### 4.1 EF Core中的并发冲突
+对于数据库中事务处理的冲突，EF Core采用乐观并发控制来处理冲突，每当EF Core调用SaveChanges方法时，会比对一个token值来判断是否存在冲突。(此token会在事务开始时从数据库获取并在数据库更新后更新)：    
+- 若该token没变，则事务继续执行
+- 若该token不匹配，则证明该数据已经被修改过，事务终止，报错给前台    
+
+在关系型数据库中，EF Core会对Update与Delete操作中的Where子句颁发一个并发token，在执行后会返回影响行数：    
+- 一般会把令牌颁发给最常变化且经常用作WHERE查询的列名
+- 若返回行数为0，则检测并发冲突，然后抛出DbUpdateConcurrencyException     
+
+### 4.2 处理冲突 
+在冲突处理中一般会有三组值：
+1. 用户在其事务开始时候从数据库读取的值
+2. 用户在其事务中尝试写入数据库的值
+3. 数据库中当前的值(被其他用户更改后的值)    
+
+因此对应的冲突处理流程一般如下：
+1. SaveChanges方法抛出DbUpdateConcurrencyException冲突
+2. 使用DbUpdateConcurrencyException.Entries获得冲突的条目(选择是否显示到前台)
+3. 重新刷新事务，获取最新的token并重新获取数据库中的值
+4. 请用户重新提交/自动重新提交事务直到没有冲突    
+
+具体实施可参考[6.并发与冲突处理](../ContosoUniversity_6)
