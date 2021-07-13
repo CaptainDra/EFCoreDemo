@@ -1,4 +1,21 @@
-[toc]
+# 目录
+- [Entity Framework Core入门文档](#entity-framework-core----)
+    * [版本数据与支持](#-------)
+        + [目前支持的数据库](#--------)
+        + [目标支持的.NET版本](#-----net--)
+    * [API参考](#api--)
+    * [基础入门教程](#------)
+    * [获取Entity Framework Core运行时](#--entity-framework-core---)
+    * [第一个EF Core应用（简单的增删改查调用）](#---ef-core-------------)
+    * [EF Core 教程](#ef-core---)
+        + [1. EFCore与Razor Pages（轻量级Web界面）的交互](#1-efcore-razor-pages----web------)
+        + [2. CRUD操作](#2-crud--)
+        + [3. 筛选、排序、分页](#3---------)
+        + [4. 迁移](#4---)
+        + [5. 读取，更新plus](#5------plus)
+        + [6 并发冲突处理](#6-------)
+    * [文本文档](#----)
+    * [参考文献](#----)
 # Entity Framework Core入门文档 #
 ***
 这是一篇根据[Microsoft官方文档](https://github.com/dotnet/EntityFramework.Docs)
