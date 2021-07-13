@@ -1,8 +1,8 @@
 # 目录
 - [Entity Framework Core入门文档](#entity-framework-core入门文档)
-    * [版本数据与支持](#-------)
-        + [目前支持的数据库](#--------)
-        + [目标支持的.NET版本](#-----net--)
+    * [版本数据与支持](#版本数据与支持)
+        + [目前支持的数据库](#目前支持的数据库)
+        + [目标支持的.NET版本](#目标支持的.NET版本)
     * [API参考](#api--)
     * [基础入门教程](#------)
     * [获取Entity Framework Core运行时](#--entity-framework-core---)
